@@ -35,14 +35,16 @@ class AutoFitTextureView : TextureView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val height = MeasureSpec.getSize(heightMeasureSpec)
-        if (0 == mRatioWidth || 0 == mRatioHeight) {
-            setMeasuredDimension(width, height)
-        } else {
-            if (width < height * mRatioWidth / mRatioHeight) {
-                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth)
-            } else {
-                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height)
-            }
-        }
+        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec)
+
+//        if (0 == mRatioWidth || 0 == mRatioHeight) {
+//            setMeasuredDimension(width, height)
+//        } else {
+//            if (width < height * mRatioWidth / mRatioHeight) {
+//                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth)
+//            } else {
+//                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height)
+//            }
+//        }
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.gallery.databinding.ActivityCustomCameraUiBinding
 import io.reactivex.disposables.Disposable
 
@@ -25,12 +26,15 @@ class CustomCameraUI : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = ActivityCustomCameraUiBinding.inflate(inflater, container, false)
-        init()
+        bindView()
         return binding.root
     }
 
-    private fun init() {
+    private fun bindView() {
 
+        binding.backIcon.setOnClickListener {
+            findNavController().navigateUp()
+        }
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
@@ -71,10 +75,20 @@ class CustomCameraUI : Fragment() {
         binding.ivCaptureImage.setOnClickListener { v ->
             camera2.takePhoto {
                 Toast.makeText(v.context, "Saving Picture", Toast.LENGTH_SHORT).show()
-                disposable = Converters.convertBitmapToFile(it) { file ->
-                    Toast.makeText(v.context, "Saved Picture Path ${file.path}", Toast.LENGTH_SHORT)
-                        .show()
-                }
+
+                binding.ivCaptureImage.visibility = View.GONE
+                binding.addMoreBtn.containerView.visibility = View.VISIBLE
+                binding.addMoreBtn.btnTitle.text = "Add More"
+                binding.doneBtn.containerView.visibility = View.VISIBLE
+                binding.doneBtn.btnTitle.text = "Done"
+                binding.doneBtn.iconBefore.visibility = View.GONE
+                binding.doneBtn.iconAfter.visibility = View.VISIBLE
+
+
+//                disposable = Converters.convertBitmapToFile(it) { file ->
+//                    Toast.makeText(v.context, "Saved Picture Path ${file.path}", Toast.LENGTH_SHORT)
+//                        .show()
+//                }
 
             }
 
@@ -87,7 +101,7 @@ class CustomCameraUI : Fragment() {
     override fun onPause() {
         //  cameraPreview.pauseCamera()
         if (this::camera2.isInitialized)
-        camera2.close()
+            camera2.close()
         super.onPause()
     }
 
